@@ -5,25 +5,28 @@ import Login from "./screens/Login";
 import NotFound from "./screens/NotFound";
 import { useState } from "react";
 import { useReactiveVar } from "@apollo/client";
-import { isLoggedInVar } from "./apollo";
+import { darkModeVar, isLoggedInVar } from "./apollo";
+import { ThemeProvider } from "styled-components";
+import { GlobalStyles, darkTheme, lightTheme } from "./styles";
 
-//오늘 공부할 주제 : reactive variables
-/* 
-  아폴로 클라이언트에도 포함되어 있어.
-  이게뭐냐 ? reactive variable는 기본적으로 반응하고 변하는 베리어블이다.
-  예를 들어서 sns에서는 다크모드 / 로그인 여부 등이 있다.
+/*
+  오늘 공부할 주제 : styled component
+  styledComponent는 리엑트에서 css를 다루기 가장 좋은 방법이라 할 수 있다
 
-  이런 리엑티브 베리어블을 리엑트 컴포넌트 내에서 사용하고 싶다면,
-  우리는 hook을 사용해야한다.
 
-*/
+  자, 다크모드 설정을 위해서는 ThemeProvider을 사용해야돼 .
+
+ */
 
 function App() {
-  // useReactiveVar으로 isLoggedInVar이라는 reactive variable가져오기 .(훅)
-  // 우리가 원하는 어느 컴포넌트에서도 isLoggedInVar을 바꿀 수 있다.
   const isLoggedIn = useReactiveVar(isLoggedInVar);
+  const darkMode = useReactiveVar(darkModeVar);
   return (
-    <div>
+    <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+      {/* 글로벌스타일이 themeprovider안에 들어가 있기때문에 !!
+      글로벌스타일에서 theme에 접근할 수 있다.
+      */}
+      <GlobalStyles />
       <Router>
         <Switch>
           <Route path="/" exact>
@@ -34,7 +37,7 @@ function App() {
           </Route>
         </Switch>
       </Router>
-    </div>
+    </ThemeProvider>
   );
 }
 
