@@ -8,6 +8,8 @@ import { useReactiveVar } from "@apollo/client";
 import { darkModeVar, isLoggedInVar } from "./apollo";
 import { ThemeProvider } from "styled-components";
 import { GlobalStyles, darkTheme, lightTheme } from "./styles";
+import SignUp from "./screens/SignUp";
+import routes from "./routes";
 
 /*
   오늘 공부할 주제 : styled component
@@ -29,9 +31,15 @@ function App() {
       <GlobalStyles />
       <Router>
         <Switch>
-          <Route path="/" exact>
+          <Route path={routes.home} exact>
             {isLoggedIn ? <Home /> : <Login />}
           </Route>
+          {/* 로그인 한 유저는 회원가입창을 보면 안됨. */}
+          {!isLoggedIn ? (
+            <Route path={routes.signUp}>
+              <SignUp />
+            </Route>
+          ) : null}
           <Route>
             <NotFound />
           </Route>
