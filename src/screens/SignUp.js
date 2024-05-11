@@ -9,6 +9,7 @@ import Button from "../components/auth/Button";
 import routes from "../routes";
 import { faRobot } from "@fortawesome/free-solid-svg-icons";
 import Seperator from "../components/auth/Seperator";
+import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 const HeaderContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -21,18 +22,36 @@ const Subtitle = styled(FatLink)`
   margin-top: 10px;
 `;
 
+const GoogleSignup = styled.div`
+  margin-top: 14px;
+  width: 100%;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  background-color: ${(props) => props.theme.accent};
+  text-align: center;
+  padding: 8px 0px;
+  span {
+    margin-left: 10px;
+    font-weight: 600;
+  }
+`;
+
 const SignUp = () => {
   return (
     <AuthLayout>
-      <FormBox>
+      <FormBox marginTop={"14px"}>
         <HeaderContainer>
           <FontAwesomeIcon icon={faRobot} size="3x" />
           <Subtitle>
             Sign Up to see Photos from your friends with CHAT-GPT.
           </Subtitle>
-          <Button type="submit" value="Get started with Google" />
+          <GoogleSignup>
+            <FontAwesomeIcon icon={faGoogle} style={{ color: "#FFD43B" }} />
+            <span>Get Start With Google</span>
+          </GoogleSignup>
         </HeaderContainer>
-        <Seperator />
+        <Seperator margin="14px 0px 0px 0px" />
         <form>
           <Input type="text" placeholder="Name" />
           <Input type="text" placeholder="Email" />

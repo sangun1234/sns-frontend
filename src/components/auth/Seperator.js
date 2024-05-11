@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const SSeparator = styled.div`
-  margin: 20px 0px 30px 0px;
+  margin: ${(props) => props.margin ?? "20px 0px 30px 0px"};
   text-transform: uppercase;
   display: flex;
   justify-content: center;
@@ -18,10 +18,9 @@ const SSeparator = styled.div`
     color: #8e8e8e;
   }
 `;
-
-function Seperator() {
+function Seperator({ margin }) {
   return (
-    <SSeparator>
+    <SSeparator margin={margin}>
       <div></div>
       <span>Or</span>
       <div></div>

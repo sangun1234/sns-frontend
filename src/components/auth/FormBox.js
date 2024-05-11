@@ -11,7 +11,7 @@ const Container = styled(BaseBox)`
   //시계방향 : 위 -> 오른쪽 -> 아래 -> 왼쪽 순 패딩
   margin-bottom: 10px;
   form {
-    margin-top: 35px;
+    margin-top: ${(props) => props.marginTop ?? "35px"};
     width: 100%;
     display: flex;
     justify-content: center;
@@ -25,8 +25,8 @@ const Container = styled(BaseBox)`
   }
 `;
 
-function FormBox({ children }) {
-  return <Container>{children}</Container>;
+function FormBox({ children, marginTop }) {
+  return <Container marginTop={marginTop}>{children}</Container>;
 }
 
 export default FormBox;
