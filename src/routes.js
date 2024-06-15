@@ -9,6 +9,7 @@
 const routes = {
   home: "/",
   signUp: "/sign-up",
+  message: "/message",
 };
 
 export default routes;

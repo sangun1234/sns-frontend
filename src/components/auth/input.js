@@ -15,6 +15,10 @@ const Input = styled.input`
     font-size: 12px;
     font-weight: 600;
   }
+
+  &:focus {
+    border-color: rgb(38, 38, 38);
+  }
 `;
 
 export default Input;

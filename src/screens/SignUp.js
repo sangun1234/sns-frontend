@@ -10,6 +10,11 @@ import routes from "../routes";
 import { faRobot } from "@fortawesome/free-solid-svg-icons";
 import Seperator from "../components/auth/Seperator";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
+import { Helmet } from "react-helmet-async";
+import { useForm } from "react-hook-form/dist/index.ie11";
+import validateEmail from "../certification/emailVaild";
+import { gql, useMutation } from "@apollo/client";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 const HeaderContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -37,9 +42,77 @@ const GoogleSignup = styled.div`
   }
 `;
 
+const CREATE_ACCOUNT_MUTATION = gql`
+  mutation createAccount(
+    $firstName: String!
+    $lastName: String
+    $userName: String!
+    $email: String!
+    $password: String!
+  ) {
+    createAccount(
+      firstName: $firstName
+      lastName: $lastName
+      userName: $userName
+      email: $email
+      password: $password
+    ) {
+      ok
+      error
+    }
+  }
+`;
+
 const SignUp = () => {
+  //url주소를 변경할 때 사용하는 hook
+  const history = useHistory();
+  const onCompleted = (data) => {
+    const { email, password } = getValues();
+    const {
+      createAccount: { ok, error },
+    } = data;
+    if (!ok) {
+      return;
+    }
+    history.push(routes.home, {
+      message: "계정 생성 완료. 로그인 하세요.",
+      email,
+      password,
+    });
+  };
+  const [createAccount, { loading }] = useMutation(CREATE_ACCOUNT_MUTATION, {
+    onCompleted,
+  });
+  const { register, handleSubmit, watch, formState, errors, getValues } =
+    useForm({
+      mode: "onChange",
+    });
+
+  console.log(watch());
+  console.log(formState.isValid);
+  const onSubmitValid = (data) => {
+    if (loading) {
+      return;
+    }
+
+    const { firstName, lastName, userName, email, password } = getValues();
+
+    createAccount({
+      variables: {
+        firstName,
+        lastName,
+        userName,
+        email,
+        password,
+      },
+    });
+  };
+
   return (
     <AuthLayout>
+      <Helmet>
+        <title>Signup</title>
+      </Helmet>
       <FormBox marginTop={"14px"}>
         <HeaderContainer>
           <FontAwesomeIcon icon={faRobot} size="3x" />
@@ -52,12 +125,63 @@ const SignUp = () => {
           </GoogleSignup>
         </HeaderContainer>
         <Seperator margin="14px 0px 0px 0px" />
-        <form>
-          <Input type="text" placeholder="Name" />
-          <Input type="text" placeholder="Email" />
-          <Input type="text" placeholder="UserName" />
-          <Input type="password" placeholder="Password" />
-          <Button type="submit" value="Sign up" />
+        <form onSubmit={handleSubmit(onSubmitValid)}>
+          <Input
+            ref={register({
+              required: true,
+            })}
+            name="firstName"
+            type="text"
+            placeholder="FirstName"
+          />
+          <Input
+            ref={register({})}
+            name="lastName"
+            type="text"
+            placeholder="LastName"
+          />
+          <Input
+            ref={register({
+              required: true,
+              minLength: {
+                value: 5,
+                message: "이메일은 5글자 이상이여야 합니다.",
+              },
+              validate: validateEmail,
+            })}
+            name="email"
+            type="text"
+            placeholder="Email"
+          />
+          <Input
+            ref={register({
+              required: true,
+              minLength: {
+                value: 5,
+                message: "username은 5글자 이상이여야 함.",
+              },
+            })}
+            name="userName"
+            type="text"
+            placeholder="UserName"
+          />
+          <Input
+            ref={register({
+              required: true,
+              minLength: {
+                value: 4,
+                message: "비밀번호는 4글자 이상이여야 합니다.",
+              },
+            })}
+            name="password"
+            type="password"
+            placeholder="Password"
+          />
+          <Button
+            type="submit"
+            value={loading ? "Loading..." : "Sign up"}
+            disabled={!formState.isValid || loading}
+          />
         </form>
       </FormBox>
       <BottomBox

@@ -5,12 +5,12 @@ import reset from "styled-reset";
 //theme에 넣어서 계속 사용할 수 있게 한다.
 export const lightTheme = {
   fontColor: "#2c2c2c",
-  bgColor: "lightGray",
+  bgColor: "white",
   //뭐를 제일 많이 썼었지 ? 싶은것들을 집어 넣으면된다.
   accent: "#0095f6",
-  borderColor: "rgb(219, 219, 219)",
+  borderColor: "#000000",
 };
-
+//rgb(219, 219, 219)
 export const darkTheme = {
   fontColor: "lightGray",
   bgColor: "#2c2c2c",
@@ -28,5 +28,9 @@ export const GlobalStyles = createGlobalStyle`
     body {
         background-color: ${(props) => props.theme.bgColor};
         color:rgb(38,38,38);
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
     }
 `;
